@@ -16,6 +16,7 @@ public abstract class Probleme extends Carte {
 	}
 	
 	@Override
+	//TODO  simplifier
 	public boolean equals(Object obj) {
 	 if(super.equals(obj)){
 		 if(obj instanceof Probleme) {
