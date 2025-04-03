@@ -17,21 +17,20 @@ public class Joueur {
 	}
 	
 	@Override
-	public String toString() {
-		return nom;
-	}
-	
-	@Override
 	public int hashCode() {
 		return 31 * nom.hashCode();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Joueur other) {
-			return nom.equals(other.getNom());
+		if (obj instanceof Joueur) {
+			return nom.equals(((Joueur) obj).getNom());
 		}
 		return false;
+	}
+	@Override
+	public String toString() {
+		return nom;
 	}
 	
 	public MainJoueur getMain() {
@@ -50,9 +49,12 @@ public class Joueur {
 		donner(carte);
 		return carte;
 	}
+	
 	public void deposer(Carte c) {
 		zoneDeJeu.deposer(c);
 	}
+
+	
 	public boolean estDepotAutorise(Carte carte) {
 		return zoneDeJeu.estDepotAutorise(carte);
 	}

@@ -18,6 +18,6 @@ public abstract class Probleme extends Carte {
 	@Override
 	//TODO  simplifier
 	public boolean equals(Object obj) {
-	return super.equals(obj) && type.equals(((Probleme)obj).getType());
+		return super.equals(obj) && type.equals(((Probleme)obj).getType());
 	}
 }

@@ -2,13 +2,14 @@ package jeu;
 import cartes.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class ZoneDeJeu {
 	
 	private List<Limite> pileLimites = new ArrayList<>();
 	private List<Bataille> pileBataille = new ArrayList<>();
-	private List<Borne> pileBorne = new ArrayList<>();
-
+	private Collection<Borne> pileBorne = new ArrayList<>();
+//ensemble
 	
 
 	public List<Limite> getLimites() {
@@ -27,7 +28,7 @@ public class ZoneDeJeu {
 	}
 	
 	public int donnerKmParcourus() {
-		int total = 0;
+		int total = pileBorne.size();
 		for (Borne borne : pileBorne) {
 			total += borne.getKm();
 		}
@@ -39,15 +40,9 @@ public class ZoneDeJeu {
 		}
 		return null;
 	}
-	public void deposer(Carte c) {
-		if (c instanceof Borne borne) {
-			pileBorne.add(borne);
-		} else if (c instanceof Limite limite)  {
-			pileLimites.add(limite);
-		} else if (c instanceof Bataille bataille) {
-			pileBataille.add(bataille);
-		}
-		}
+	
+	
+	
 	public boolean peutAvancer() {
 		if (pileBataille.isEmpty() ) {
 			return true;
@@ -91,19 +86,30 @@ public class ZoneDeJeu {
 				return estDepotFeuVertAutorise();
 			} else {
 				Bataille sommet = donnerSommet(pileBataille);
-				boolean var= (sommet != null) && (sommet instanceof Attaque) && sommet.getType().equals(bataille.getType());
-				return var;
+				return (sommet != null) && (sommet instanceof Attaque) && sommet.getType().equals(bataille.getType());
 			}
 		}
 		return false;
 	}
+	public void deposer(Carte carte) {
+		if(carte instanceof Borne) {
+			pileBorne.add((Borne)carte);
+		}
+		if(carte instanceof Bataille) {
+			pileBataille.add((Bataille)carte);
+		}
+		if(carte instanceof Limite) {
+			pileLimites.add((Limite)carte);
+		}
+	}
+	
 	public boolean estDepotAutorise(Carte carte) {
-		if (carte instanceof Borne borne) {
-			return estDepotBorneAutorise(borne);
-		} else if (carte instanceof Limite limite) {
-			return estDepotLimiteAutorise(limite);
-		} else if (carte instanceof Bataille bataille) {
-			return estDepotBatailleAutorise(bataille);
+		if (carte instanceof Borne ) {
+			return estDepotBorneAutorise((Borne)carte);
+		} else if (carte instanceof Limite ) {
+			return estDepotLimiteAutorise((Limite)carte);
+		} else if (carte instanceof Bataille ) {
+			return estDepotBatailleAutorise((Bataille)carte);
 		} else {
 			return true;
 		}

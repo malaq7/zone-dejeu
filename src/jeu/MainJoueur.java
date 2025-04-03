@@ -1,6 +1,7 @@
 package jeu;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.List;
 
 import cartes.Carte;
@@ -9,31 +10,24 @@ public class MainJoueur {
 	
 	private List<Carte> main = new ArrayList<>();
 
-	public MainJoueur() {
-		
+	public MainJoueur() {}
+	
+	public void prendre(Carte carte) {
+		main.add(carte);
 	}
 	
-	public void prendre(Carte e) {
-		main.add(e);
-	}
-	
-	public void jouer(Carte e) {
-		assert main.contains(e);
-		main.remove(e);
+	public void jouer(Carte carte) {
+		assert main.contains(carte);
+		main.remove(carte);
 	}
 	
 
 	
 	@Override
 	public String toString() {
-		int nbCartes = main.size();
 		StringBuilder string = new StringBuilder("[");
-		
-		for (int i = 0; i < nbCartes; i++) {
-			if (i < nbCartes - 1)
-				string.append(main.get(i).toString() + ", ");
-			else
-				string.append(main.get(i).toString());
+		for (ListIterator<Carte> iter =main.listIterator() ; iter.hasNext() ;) {
+				string.append(main.get(iter.nextIndex()- 1 ).toString());
 		}
 		string.append("]\n");
 		return string.toString();
