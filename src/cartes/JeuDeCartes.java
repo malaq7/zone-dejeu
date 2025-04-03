@@ -31,8 +31,7 @@ public class JeuDeCartes {
 
 	public Carte[] donnerCartes() {
         Carte[] cartes = new Carte[getCount()];
-
-        for (int i = 0, j = 0; j < 19; j++) {
+        for (int i = 0, j = 0; j < typesDeCartes.length; j++) {
             Configuration config = typesDeCartes[j];
             for (int numCarte = 0; numCarte < config.getNbExemplaires(); numCarte++) {
                 cartes[i++] = config.getCarte();
@@ -45,7 +44,7 @@ public class JeuDeCartes {
     
 	public boolean checkCount() {
 	    Carte[] cartes = donnerCartes();  
-	    for (int i = 0; i < 19; i++) {  
+	    for (int i = 0; i < typesDeCartes.length; i++) {  
 	        Carte c = typesDeCartes[i].getCarte(); 
 	        int expectedCount = typesDeCartes[i].getNbExemplaires(); 
 	        	        int actualCount = 0;

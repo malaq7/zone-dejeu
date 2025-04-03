@@ -9,12 +9,12 @@ import java.util.ListIterator;
 
 public class GestionCartes {
 	private static List<Carte> liste = new ArrayList<>();
-	private static Random seed = new Random();
+	private static Random random = new Random();
 
 
 	public static Carte extraire1(Carte cartes) {
 		int nbCartes = liste.size();
-		int value = seed.nextInt(nbCartes);
+		int value = random.nextInt(nbCartes);
 		//TODO simplifier
 		return liste.remove(value);	}
  
@@ -23,20 +23,18 @@ public class GestionCartes {
 			return null;
 		}
 		//TODO ListIterator
-		ListIterator<Carte> iterator = cartes.listIterator();
-		int i = seed.nextInt(cartes.size());
+		int i = random.nextInt(cartes.size());
 		Carte courant = null;
-		for (; iterator.hasNext()&&i>=0; i--) {
-			courant = iterator.next();
-		}
+
+		ListIterator<Carte> iterator = cartes.listIterator(i);
+		iterator.next();
 		iterator.remove();
 		return courant;
 	}
 
 	public static List<Carte> melanger(List<Carte> listePasMelangee) {
-		int taille = listePasMelangee.size();
 		List<Carte> listeMelangee = new ArrayList<>();
-		for (int i = 0; i < taille; i++) {
+		for (int i = 0; i < listePasMelangee.size(); i++) {
 			listeMelangee.add(extraire(listePasMelangee));
 		}
 		listePasMelangee.addAll(listeMelangee);
@@ -64,6 +62,7 @@ public class GestionCartes {
         return true;
     }
 
+	//Méthode mal écrite
 	public static List<Carte> rassembler1(List<Carte> liste) {
 		//TODO utiliser contains
 		int longueur = liste.size();
@@ -116,28 +115,24 @@ public class GestionCartes {
 		return true;
 	}
 	
-	public static boolean trouverElementFinListe(List<Carte> listeRassemble, Carte element, int i) {
-		int j = 0;
-		for (ListIterator<Carte> iter2 = listeRassemble.listIterator(); iter2.hasNext();) {
+	private static boolean trouverElementFinListe(List<Carte> listeRassemble, Carte element, int index) {
+		for (ListIterator<Carte> iter2 = listeRassemble.listIterator(index); iter2.hasNext();) {
 			Carte elem2 = iter2.next();
-			if (j > i && elem2.equals(element)) {
+			if (elem2.equals(element)) {
 				return false;
 			}
-			j++;
 		}
 		return true;
 	}
 	
 	public static boolean verifierRassemblement(List<Carte> listeRassemble) {
 		Carte prev = null;
-		int i = 0;
 		for (ListIterator<Carte> iter1 = listeRassemble.listIterator(); iter1.hasNext();) {
 			Carte elem1 = iter1.next();
 			if (prev != null && !elem1.equals(prev)) {
-				if (!trouverElementFinListe(listeRassemble, prev, i)) return false;
+				if (!trouverElementFinListe(listeRassemble, prev, iter1.nextIndex())) return false;
 			}
 			prev = elem1;
-			i++;
 		}
 		return true;
 	}
