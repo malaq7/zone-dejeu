@@ -17,7 +17,7 @@ public class GestionCartes {
 		int value = seed.nextInt(nbCartes);
 		//TODO simplifier
 		return liste.remove(value);	}
-
+ 
 	public static Carte extraire(List<Carte> cartes) {
 		if (cartes.isEmpty()) {
 			return null;

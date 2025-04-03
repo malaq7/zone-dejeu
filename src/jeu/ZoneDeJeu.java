@@ -52,11 +52,11 @@ public class ZoneDeJeu {
 		if (pileBataille.isEmpty() ) {
 			return true;
 		} else if (!pileBataille.isEmpty()) {
-			Bataille c = donnerSommet(pileBataille);
-			return (c.equals(Cartes.FEU_VERT) 
-					|| ((c instanceof Parade)) 
-					|| ((c instanceof Attaque) && c.equals(Cartes.FEU_ROUGE))
-					|| ((c instanceof Attaque) && !c.equals(Cartes.FEU_ROUGE) ));
+			Bataille sommet = donnerSommet(pileBataille);
+			return (sommet.equals(Cartes.FEU_VERT) 
+					|| ((sommet instanceof Parade)) 
+					|| ((sommet instanceof Attaque) && sommet.equals(Cartes.FEU_ROUGE))
+					|| ((sommet instanceof Attaque) && !sommet.equals(Cartes.FEU_ROUGE) ));
 		}
 		return false;
 	}
@@ -64,10 +64,9 @@ public class ZoneDeJeu {
 		if (pileBataille.isEmpty()) {
 			return true;
 		} else {
-			Bataille s = donnerSommet(pileBataille);
-			return s.equals(Cartes.FEU_ROUGE)
-					|| (s instanceof Parade && !(s.equals(Cartes.FEU_VERT)))
-					|| (s instanceof Attaque );
+			Bataille sommet = donnerSommet(pileBataille);
+			return sommet.equals(Cartes.FEU_ROUGE)
+					|| (sommet instanceof Parade && !(sommet.equals(Cartes.FEU_VERT))) || (sommet instanceof Attaque );
 		}
 	}
 	
