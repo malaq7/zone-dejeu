@@ -4,23 +4,19 @@ import java.util.List;
 import java.util.ArrayList;
 import cartes.*;
 import java.util.Random;
-import java.util.Iterator;
 import java.util.Collections;
 import java.util.ListIterator;
 
 public class GestionCartes {
 	private static List<Carte> liste = new ArrayList<>();
+	private static Random seed = new Random();
+
 
 	public static Carte extraire1(Carte cartes) {
-		int min = 0;
 		int nbCartes = liste.size();
-		Random random = new Random();
-		int value = random.nextInt(nbCartes);
+		int value = seed.nextInt(nbCartes);
 		//TODO simplifier
-		Carte carte = liste.remove(value);
-
-		return carte;
-	}
+		return liste.remove(value);	}
 
 	public static Carte extraire(List<Carte> cartes) {
 		if (cartes.isEmpty()) {
@@ -28,17 +24,12 @@ public class GestionCartes {
 		}
 		//TODO ListIterator
 		ListIterator<Carte> iterator = cartes.listIterator();
-		Random random = new Random();
-		int value = random.nextInt(cartes.size());
+		int i = seed.nextInt(cartes.size());
 		Carte courant = null;
-		for (int i = 0; iterator.hasNext(); i++) {
+		for (; iterator.hasNext()&&i>=0; i--) {
 			courant = iterator.next();
-			if (i == value) {
-				iterator.remove();
-				break;
-			}
-
 		}
+		iterator.remove();
 		return courant;
 	}
 
@@ -73,7 +64,7 @@ public class GestionCartes {
         return true;
     }
 
-	public static List<Carte> rassembler(List<Carte> liste) {
+	public static List<Carte> rassembler1(List<Carte> liste) {
 		//TODO utiliser contains
 		int longueur = liste.size();
 		List<Carte> listTriee = new ArrayList<>(longueur);
@@ -88,8 +79,23 @@ public class GestionCartes {
 		}
 		return listTriee;
 	}
+	public static List<Carte> rassembler(List<Carte> liste) {
+	    List<Carte> listTriee = new ArrayList<>();
+	    List<Carte> copieListe = new ArrayList<>(liste);
 
-	public static boolean verifierRassemblement(List<Carte> liste) {
+	    for (Carte element : liste) { 	       
+	        if (!listTriee.contains(element)) { 
+	            int frequence = Collections.frequency(copieListe, element);
+	            for (int j = 0; j < frequence; j++) {
+	                listTriee.add(element);
+	            }
+	        }
+	    }
+	    return listTriee;
+	}
+	
+
+	public static boolean verifierRassemblement1(List<Carte> liste) {
 		Carte precedent = null;
 		int i = 0;
 		for (ListIterator<Carte> iter1 = liste.listIterator(); iter1.hasNext();) {
@@ -105,6 +111,32 @@ public class GestionCartes {
 				}
 			}
 			precedent = carte1;
+			i++;
+		}
+		return true;
+	}
+	
+	public static boolean trouverElementFinListe(List<Carte> listeRassemble, Carte element, int i) {
+		int j = 0;
+		for (ListIterator<Carte> iter2 = listeRassemble.listIterator(); iter2.hasNext();) {
+			Carte elem2 = iter2.next();
+			if (j > i && elem2.equals(element)) {
+				return false;
+			}
+			j++;
+		}
+		return true;
+	}
+	
+	public static boolean verifierRassemblement(List<Carte> listeRassemble) {
+		Carte prev = null;
+		int i = 0;
+		for (ListIterator<Carte> iter1 = listeRassemble.listIterator(); iter1.hasNext();) {
+			Carte elem1 = iter1.next();
+			if (prev != null && !elem1.equals(prev)) {
+				if (!trouverElementFinListe(listeRassemble, prev, i)) return false;
+			}
+			prev = elem1;
 			i++;
 		}
 		return true;
