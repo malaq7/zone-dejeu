@@ -32,4 +32,8 @@ public class MainJoueur {
 		string.append("]\n");
 		return string.toString();
 	}
+	
+	public List<Carte> getListeCartes() {
+		return main;
+	}
 }

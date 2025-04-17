@@ -3,13 +3,19 @@ import cartes.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Iterator;
+
 
 public class ZoneDeJeu {
 	
 	private List<Limite> pileLimites = new ArrayList<>();
 	private List<Bataille> pileBataille = new ArrayList<>();
 	private Collection<Borne> pileBorne = new ArrayList<>();
-//ensemble
+//ensemble\
+	private Set<Botte> bottes = new HashSet<>();
+
 	
 
 	public List<Limite> getLimites() {
@@ -20,48 +26,61 @@ public class ZoneDeJeu {
 		return pileBataille;
 	}
 	
-	public int donnerLimitationVitesse() {
-		if (pileLimites.isEmpty() || (donnerSommet(pileLimites) instanceof FinLimite)) {
-			return 200;
-		}
-		return 50;
+	public Set<Botte> getBottes() {
+		return bottes;
 	}
 	
-	public int donnerKmParcourus() {
-		int total = pileBorne.size();
-		for (Borne borne : pileBorne) {
-			total += borne.getKm();
-		}
-		return total;
+	public boolean estPrioritaire() {
+		return bottes.contains(Cartes.PRIORITAIRE);
 	}
-	public <E> E donnerSommet(List<E> pile) {
-		if (!pile.isEmpty()) {
-			return pile.get(pile.size() - 1);
+	
+
+	 public int donnerLimitationVitesse() {
+	        if (pileLimites.isEmpty() || 
+	            (donnerSommet(pileLimites) instanceof FinLimite) || 
+	            estPrioritaire()) {
+	            return 200;
+	        }
+	        return 50;
+	}
+	 
+	 public int donnerKmParcourus() {
+		 int total = 0;
+		 Iterator<Borne> it = pileBorne.iterator();
+		    while (it.hasNext()) {
+		        total += it.next().getKm();
+		    }
+		    return total;
 		}
-		return null;
+	 
+	public <E> E donnerSommet(List<E> pile) {
+	    return pile.isEmpty() ? null : pile.get(pile.size() - 1);
 	}
 	
 	
 	
 	public boolean peutAvancer() {
-		if (pileBataille.isEmpty() ) {
+		if (pileBataille.isEmpty() && estPrioritaire()) {
 			return true;
 		} else if (!pileBataille.isEmpty()) {
-			Bataille sommet = donnerSommet(pileBataille);
-			return (sommet.equals(Cartes.FEU_VERT) 
-					|| ((sommet instanceof Parade)) 
-					|| ((sommet instanceof Attaque) && sommet.equals(Cartes.FEU_ROUGE))
-					|| ((sommet instanceof Attaque) && !sommet.equals(Cartes.FEU_ROUGE) ));
+			Bataille c = donnerSommet(pileBataille);
+			return (c.equals(Cartes.FEU_VERT) 
+					|| ((c instanceof Parade) && estPrioritaire()) 
+					|| ((c instanceof Attaque) && c.equals(Cartes.FEU_ROUGE) && estPrioritaire())
+					|| ((c instanceof Attaque) && !c.equals(Cartes.FEU_ROUGE) &&
+							bottes.contains(new Botte(c.getType())) && estPrioritaire()));
 		}
 		return false;
 	}
+	
 	private boolean estDepotFeuVertAutorise() {
 		if (pileBataille.isEmpty()) {
 			return true;
 		} else {
 			Bataille sommet = donnerSommet(pileBataille);
 			return sommet.equals(Cartes.FEU_ROUGE)
-					|| (sommet instanceof Parade && !(sommet.equals(Cartes.FEU_VERT))) || (sommet instanceof Attaque );
+					|| (sommet instanceof Parade && 
+							!(sommet.equals(Cartes.FEU_VERT))) || (sommet instanceof Attaque );
 		}
 	}
 	
@@ -70,6 +89,7 @@ public class ZoneDeJeu {
 				&& b.getKm() <= donnerLimitationVitesse()
 				&& b.getKm() + donnerKmParcourus() <= 1000;
 	}
+	
 	private boolean estDepotLimiteAutorise(Limite limite) {
 		if (limite instanceof DebutLimite) {
 			return pileLimites.isEmpty() || (donnerSommet(pileLimites) instanceof FinLimite);
@@ -100,6 +120,9 @@ public class ZoneDeJeu {
 		}
 		if(carte instanceof Limite) {
 			pileLimites.add((Limite)carte);
+		}
+		else if (carte instanceof Botte botte) {
+			bottes.add(botte);
 		}
 	}
 	
