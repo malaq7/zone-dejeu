@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import cartes.Carte;
-import cartes.JeuDeCartes;
 
 public class Sabot implements Iterable<Carte> {
 

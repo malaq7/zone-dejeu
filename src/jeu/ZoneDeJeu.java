@@ -106,20 +106,20 @@ public class ZoneDeJeu {
 				return estDepotFeuVertAutorise();
 			} else {
 				Bataille sommet = donnerSommet(pileBataille);
-				return (sommet != null) && (sommet instanceof Attaque) && sommet.getType().equals(bataille.getType());
+				return   (sommet instanceof Attaque) && sommet.getType().equals(bataille.getType());
 			}
 		}
 		return false;
 	}
 	public void deposer(Carte carte) {
-		if(carte instanceof Borne) {
-			pileBorne.add((Borne)carte);
+		if(carte instanceof Borne borne ) {
+			pileBorne.add(borne) ;
 		}
-		if(carte instanceof Bataille) {
-			pileBataille.add((Bataille)carte);
+		else if(carte instanceof Bataille bataille) {
+			pileBataille.add(bataille);
 		}
-		if(carte instanceof Limite) {
-			pileLimites.add((Limite)carte);
+		else if(carte instanceof Limite limite) {
+			pileLimites.add(limite);
 		}
 		else if (carte instanceof Botte botte) {
 			bottes.add(botte);
@@ -127,10 +127,10 @@ public class ZoneDeJeu {
 	}
 	
 	public boolean estDepotAutorise(Carte carte) {
-		if (carte instanceof Borne ) {
-			return estDepotBorneAutorise((Borne)carte);
-		} else if (carte instanceof Limite ) {
-			return estDepotLimiteAutorise((Limite)carte);
+		if (carte instanceof Borne borne ) {
+			return estDepotBorneAutorise((borne));
+		} else if (carte instanceof Limite limite ) {
+			return estDepotLimiteAutorise(limite);
 		} else if (carte instanceof Bataille ) {
 			return estDepotBatailleAutorise((Bataille)carte);
 		} else {

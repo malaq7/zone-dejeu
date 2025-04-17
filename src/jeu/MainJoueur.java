@@ -10,15 +10,19 @@ public class MainJoueur {
 	
 	private List<Carte> main = new ArrayList<>();
 
-	public MainJoueur() {}
+	public MainJoueur() {
+		/* TODO document why this constructor is empty */
+		// TODO
+		}
 	
 	public void prendre(Carte carte) {
 		main.add(carte);
 	}
 	
 	public void jouer(Carte carte) {
-		assert main.contains(carte);
-		main.remove(carte);
+		if( main.contains(carte)) {
+			main.remove(carte ); 
+		}
 	}
 	
 

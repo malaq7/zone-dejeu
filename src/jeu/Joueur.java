@@ -68,21 +68,15 @@ public class Joueur {
 	
 	public Set<Coup> coupsPossibles(Set<Joueur> participants) {
 		Set<Coup> coups = new HashSet<>();
-		Iterator<Joueur> itJoueurCible = participants.iterator();
+		Iterator<Joueur> it = participants.iterator();
 		
-		while (itJoueurCible.hasNext()) {
-			Joueur joueurCible = itJoueurCible.next();
+		while (it.hasNext()) {
+			Joueur joueurCible = it.next();
+			ListIterator<Carte> it2 = joueurCible.getMain().getListeCartes().listIterator();
 			
-			ListIterator<Carte> cartesIterateur = joueurCible.getMain().getListeCartes().listIterator();
-			for (; cartesIterateur.hasNext();) {
-				Carte carte = cartesIterateur.next();
-				
-				Coup coup = new Coup(this, joueurCible, carte);
-				if (coup.estValide()) {
-					coups.add(coup);
 				}
-			}
-		}
+			
+		
 		
 		return coups;
 	}

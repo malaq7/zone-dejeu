@@ -1,8 +1,6 @@
 package jeu;
 
-import cartes.Attaque;
-import cartes.Carte;
-import cartes.DebutLimite;
+import cartes.*;
 
 public class Coup {
 	
@@ -10,7 +8,7 @@ public class Coup {
 	private Joueur joueurCible;
 	private Carte carteJouee;
 	
-	public Coup(Joueur joueurCourant, Joueur joueurCible, Carte carteJouee) {
+	public Coup(Joueur joueurCourant, Carte carteJouee, Joueur joueurCible) {
 		this.joueurCourant = joueurCourant;
 		this.joueurCible = joueurCible;
 		this.carteJouee = carteJouee;
@@ -29,11 +27,13 @@ public class Coup {
 	}
 	
 	public boolean estValide() {
-		if (carteJouee instanceof Attaque || carteJouee instanceof DebutLimite) {
-			return joueurCourant != null && joueurCible != null && !joueurCourant.equals(joueurCible);
-		} else {
-			return joueurCourant != null && joueurCourant.equals(joueurCible);
-		}
+		if(joueurCourant != null)
+			if (carteJouee instanceof Attaque || carteJouee instanceof DebutLimite) {
+				return !joueurCourant.equals(joueurCible);
+			} else {
+				return  joueurCourant.equals(joueurCible);
+			}
+		else return false;
 	}
 	
 	
@@ -44,11 +44,6 @@ public class Coup {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Coup other) {
-			return joueurCourant.equals(other.getJoueurCourant())
-					&& joueurCible.equals(other.getJoueurCible())
-					&& carteJouee.equals(other.getCarteJouee());
-		}
 		return false;
 	}
 }
